@@ -27,3 +27,20 @@ df %>%  group_by(CHD_Event) %>% summarise(mu = mean(Cholesterol),
 #   1         0  200.  35.9   460
 #   2         1  213.  33.3    40
 
+Sp2 = (39*(33.3^2) + 459*(35.9^2) ) / 498
+Sp2
+Sp = sqrt(Sp2); Sp
+# [1] 35.70322
+
+tc = 13  / ( Sp * sqrt( (1/40) + (1/460)  ) ); tc
+#[1] 2.208818
+
+t.test( df %>% 
+          filter(CHD_Event == 1)  %>% 
+          select(Cholesterol), 
+        df %>% 
+          filter(CHD_Event == 0)  %>% 
+          select(Cholesterol) )
+
+
+
