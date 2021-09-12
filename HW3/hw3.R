@@ -1,7 +1,9 @@
 ##---------------------------------------------
-##  Project: BIOS 662 Homework 3 code
+##  Project: BIOS 662 Homework 3 - R Code
 ##
-##  Author: Alvaro C. Quijano
+##  Author: Alvaro C. Quijano-Angarita
+##
+##  PID: 730500507
 ##
 ##  Date: September 13, 2021
 ##
@@ -74,9 +76,11 @@ db = df %>%
   .$Cholesterol
 nb = length(db); nb
 meanb = mean(db); meanb
+varb  = var(db); varb
 Zb = vector()
 
 ## Boostrap method
+### 10.000 simulations
 for(i in 1:10000){
   sampleb = sample(db, 
                    size = nb, 
@@ -84,9 +88,33 @@ for(i in 1:10000){
   Zb[i] = (mean(sampleb) - meanb ) / sqrt( var(sampleb) / nb )
 }
 
+### Plotting the sampling distirbution for z*(i) values
 plot(density(Zb), 
-     main = "Boostrap sampling distribution for Z*(B) values")
+     main = "Bootstrap sampling distribution for Z*(B) values")
 
+### Computing bootstrap quantiles
 
-quantile(Zb, 0.975)
-quantile(Zb, 0.025)
+upper.t = quantile(Zb, 0.975); upper.t
+# quantile 97.5% 
+# 2.016324 
+
+lower.t = quantile(Zb, 0.025); lower.t
+# quantile 2.5% 
+# -2.116028 
+
+#### Approximate 95% interval
+lower.y = meanb + lower.t*sqrt(varb/nb); lower.y
+upper.y = meanb + upper.t*sqrt(varb/nb); upper.y
+
+print(paste0("(", 
+             round(lower.y,4) , 
+             ", ", 
+             round(upper.y,4), ")" ))
+
+### Median confidence interval
+
+dMo = df %>%  
+  filter(Gender == 'F' & 
+           CHD_Event == 1 ) %>% 
+  .$Cholesterol
+
