@@ -1,2 +1,2 @@
-# bios660
-Bios 660 Course assignments - UNC at Chapel Hill
+# bios662
+Bios 662 Course assignments - UNC at Chapel Hill
