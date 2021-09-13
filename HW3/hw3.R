@@ -12,6 +12,7 @@
 ### loading libraries
 library(ggplot2)
 library(dplyr)
+library(stargazer)
 
 ## Reading data from folder
 df = read.table('HW3/data/HW3_CHOL.txt')
@@ -118,3 +119,27 @@ dMo = df %>%
            CHD_Event == 1 ) %>% 
   .$Cholesterol
 
+## Median
+Mo = median(dMo); Mo
+# [1] 204.5
+
+nMo = length(dMo)
+
+table = cbind(0:14, 
+      pbinom(0:14, size = nMo, prob = 0.5), 
+      ifelse( pbinom(0:14, size = nMo, prob = 0.5) < 0.025,1, 0 ) ) ; table
+stargazer(table)
+
+### Confidence interval
+paste(sort(dMo)[2+1],  sort(dMo)[nMo - 2])
+
+### Wilcoxon test
+
+
+x = df %>%  filter(Gender == 'M' &  CHD_Event == 0) %>%  .$Cholesterol 
+y = df %>%  filter(Gender == 'M' &  CHD_Event == 1) %>%  .$Cholesterol 
+wilcox.test(x, y = NULL,
+            alternative = c("two.sided", "less", "greater"))
+
+
+ks.test(x, y)
